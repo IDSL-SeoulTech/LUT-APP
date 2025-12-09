@@ -24,24 +24,48 @@ conda activate gade_env
 
 ## How to Use
 
+### Supporting Non-linear Opeartions List
+
+```
+Exponential (EXP)
+Reciprocal (RECI)
+Reciprocal Root Squre Root (RSQRT)
+GeLU (GeLU)
+SiLU (SiLU)
+```
+
 ### Algorithm Script
 
 ```
-python gade_lut_train.py --act_func (non-linear function name) --num_splits (segments - 1) --total_iters (# of iterations) --x_range (Approximation Range) --sp_range (Approximation Range) --num_runs (# of runs) --dynamic
+python gade_lut_train.py --act_func (non-linear function name) --num_splits (segments - 1) --total_iters (# of iterations) --x_range (Input Range) --sp_range (Breakpoint Range) --num_runs (# of runs) --dynamic
 ```
 
 Example of approximationg EXP with 8 segments:
+
 ```
-python gade_lut_train.py --act_func 'exp' --num_splits 7 --total_iters 500 --x_range -9.0 0.0 --sp_range -9.0 0.0 --num_runs 10 --dynamic
+python gade_lut_train.py --act_func 'exp' --num_splits 7 --total_iters 500 --x_range -9.0 0.0 --sp_range -8.0 0.0 --num_runs 10 --dynamic
 ```
 
 ### Evaluation Script
+
 ```
-python gade_lut_train.py --act_func (non-linear function name) --num_splits (segments - 1) --total_iters (# of iterations) --x_range (Approximation Range) --sp_range (Approximation Range) --num_runs (# of runs) --dynamic
+python operator_val.py --act_func (non-linear function name) --distance (distance between samples) --input_range (Input Range) --dynamic --param_path (Path to PWL Perameter)
 ```
 
 Example of evaluating EXP:
+
 ```
-python gade_lut_train.py --act_func 'exp'  --num_splits 7  --total_iters 500 --x_range -9.0 0.0 --sp_range -9.0 0.0 --num_runs 10 --dynamic
+python operator_val.py --act_func 'exp' --distance 0.0009765625 --input_range -9.0 0 --dynamic --param_path ./gade_pwl_param/exp/entry_8/exp_7_dff_True_seed_7202_0.001812850.json
 ```
 
+### Reproduce Paper Result
+
+```
+chomod -R 777 ./gade_lut_train_prompt_dff_True.csh
+./gade_lut_train_prompt_dff_True.csh
+```
+
+## References
+This project is based on the following repository:
+  - https://github.com/PingchengDong/GQA-LUT
+    (Used as the base implementation)
